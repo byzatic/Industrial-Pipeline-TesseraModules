@@ -1,0 +1,26 @@
+{
+  "generator_name": "hydraulics",
+  "special_value_range": "None",
+  "nominals": [
+    {
+      "name": "Pin_nom",
+      "value": "4.0"
+    },
+    {
+      "name": "ΔP_nom",
+      "value": "1.5"
+    },
+    {
+      "name": "Q_nom",
+      "value": "2500"
+    },
+    {
+      "name": "Pout_nom",
+      "value": "5.5"
+    },
+    {
+      "name": "T_nom",
+      "value": "25"
+    }
+  ]
+}

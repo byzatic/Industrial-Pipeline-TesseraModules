@@ -1,0 +1,29 @@
+# Metrics Core Gen3 DSL
+#
+# file_dsl.mcg3dsl
+#
+#
+
+// this is a comment
+
+/* multi-line
+comment
+*/
+
+GET FROM SELF STORAGE <Storage Name> BY DATA ID <Data ID>;
+GET FROM SELF STORAGE <Storage Name> MODIFIER <local/global> BY DATA ID <Data ID>;
+
+GET FROM SELF STORAGE <Storage Name> BY DATA ID <Data ID> AS <Local Data ID>;
+GET FROM SELF STORAGE <Storage Name> MODIFIER <local/global> BY DATA ID <Data ID> AS <Local Data ID>;
+
+GET FROM CHILD <Child Name> STORAGE <Storage Name> BY DATA ID <Data ID>;
+GET FROM CHILD <Child Name> STORAGE <Storage Name> MODIFIER <local/global> BY DATA ID <Data ID>;
+
+GET FROM CHILD <Child Name> STORAGE <Storage Name> BY DATA ID <Data ID> AS <Local Data ID>;
+GET FROM CHILD <Child Name> STORAGE <Storage Name> MODIFIER <local/global> BY DATA ID <Data ID> AS <Local Data ID>;
+
+PROCESS FUNCTION <Function Name> RETURN <New Local Data ID>;
+PROCESS FUNCTION <Function Name>("arg1", "arg2", "arg3", ... , "argN") RETURN <New Local Data ID>;
+
+PUT DATA <New Local Data ID> TO STORAGE <Storage Name> BY DATA ID <Local Data ID>;
+PUT DATA <New Local Data ID> TO STORAGE <Storage Name> MODIFIER <local/global> BY DATA ID <Local Data ID>;

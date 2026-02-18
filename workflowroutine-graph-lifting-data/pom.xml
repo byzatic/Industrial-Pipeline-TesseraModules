@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.byzatic</groupId>
+        <artifactId>Industrial-Pipeline-TesseraModules</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>workflowroutine-graph-lifting-data</artifactId>
+    <version>0.0.1</version>
+    <packaging>jar</packaging>
+
+    <name>workflowroutine-graph-lifting-data</name>
+    <properties>
+        <fully.qualified.main.class>${project.groupId}.tessera.industrial_pipeline.workflowroutine.graph_lifting_data.GraphLiftingDataWorkflowRoutine</fully.qualified.main.class>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.byzatic</groupId>
+            <artifactId>sharedresources-project-common</artifactId>
+            <version>0.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.34</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.6.1</version>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,458 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.github.byzatic</groupId>
+  <artifactId>Industrial-Pipeline-TesseraModules</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>Industrial-Pipeline-TesseraModules</name>
+  <description>A collection of modular Java modules for Tessera DFE.</description>
+  <url>https://github.com/byzatic/Industrial-Pipeline-TesseraModules</url>
+
+  <licenses>
+    <license>
+      <name>The Apache-2.0 License</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>byzatic</id>
+      <name>Svyatoslav Vlasov</name>
+      <email>s.vlasov.home@icloud.com</email>
+      <url>https://github.com/byzatic</url>
+    </developer>
+  </developers>
+  <modules>
+    <module>sharedresources-project-common</module>
+    <module>service-prometheus-export</module>
+    <module>workflowroutine-data-enrichment</module>
+      <module>workflowroutine-graph-lifting-data</module>
+      <module>workflowroutine-processing-status</module>
+    <module>workflowroutine-get-data</module>
+  </modules>
+
+  <scm>
+    <url>https://github.com/byzatic/Industrial-Pipeline-TesseraModules</url>
+    <connection>scm:git:git://github.com/byzatic/Industrial-Pipeline-TesseraModules.git</connection>
+    <developerConnection>scm:git:ssh://github.com/byzatic/Industrial-Pipeline-TesseraModules.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <!--  <distributionManagement>-->
+  <!--    <snapshotRepository>-->
+  <!--      <id>central</id>-->
+  <!--      <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>-->
+  <!--    </snapshotRepository>-->
+  <!--    <repository>-->
+  <!--      <id>central</id>-->
+  <!--      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
+  <!--    </repository>-->
+  <!--  </distributionManagement>-->
+
+  <repositories>
+    <repository>
+      <name>Central Portal Snapshots</name>
+      <id>central-portal-snapshots</id>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <properties>
+    <!-- project settings -->
+    <project.java.version>17</project.java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <!-- dependency versions list -->
+    <version.java_byzatic_commons>0.0.6</version.java_byzatic_commons>
+    <version.slf4j>1.7.25</version.slf4j>
+    <version.logback>1.5.13</version.logback>
+    <version.junit>4.13.1</version.junit>
+    <version.jetbrains_annotations>21.0.1</version.jetbrains_annotations>
+    <version.tessera_workflow_toolkit>0.0.1</version.tessera_workflow_toolkit>
+  </properties>
+
+  <!-- manual set -->
+  <dependencies>
+
+    <!-- included in tessera-workflow-toolkit -->
+    <!-- https://central.sonatype.com/artifact/io.github.byzatic/tessera-enginecommon-lib -->
+    <dependency>
+      <groupId>io.github.byzatic</groupId>
+      <artifactId>tessera-enginecommon-lib</artifactId>
+      <version>${version.tessera_workflow_toolkit}</version>
+    </dependency>
+
+    <!-- included in tessera-workflow-toolkit -->
+    <!-- https://central.sonatype.com/artifact/io.github.byzatic/tessera-storageapi-lib -->
+    <dependency>
+      <groupId>io.github.byzatic</groupId>
+      <artifactId>tessera-storageapi-lib</artifactId>
+      <version>${version.tessera_workflow_toolkit}</version>
+    </dependency>
+
+    <!-- included in tessera-workflow-toolkit -->
+    <!-- https://central.sonatype.com/artifact/io.github.byzatic/tessera-service-lib -->
+    <dependency>
+      <groupId>io.github.byzatic</groupId>
+      <artifactId>tessera-service-lib</artifactId>
+      <version>${version.tessera_workflow_toolkit}</version>
+    </dependency>
+
+    <!-- included in tessera-workflow-toolkit -->
+    <!-- https://central.sonatype.com/artifact/io.github.byzatic/tessera-workflowroutine-lib -->
+    <dependency>
+      <groupId>io.github.byzatic</groupId>
+      <artifactId>tessera-workflowroutine-lib</artifactId>
+      <version>${version.tessera_workflow_toolkit}</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.google.auto.service/auto-service -->
+    <dependency>
+      <groupId>com.google.auto.service</groupId>
+      <artifactId>auto-service</artifactId>
+      <version>1.1.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.auto.service</groupId>
+      <artifactId>auto-service-annotations</artifactId>
+      <version>1.1.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- https://central.sonatype.com/artifact/io.github.byzatic/java-byzatic-commons/overview -->
+    <dependency>
+      <groupId>io.github.byzatic</groupId>
+      <artifactId>java-byzatic-commons</artifactId>
+      <version>${version.java_byzatic_commons}</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.github.zafarkhaja/java-semver -->
+    <dependency>
+      <groupId>com.github.zafarkhaja</groupId>
+      <artifactId>java-semver</artifactId>
+      <version>0.10.2</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.18.0</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.11.0</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/junit/junit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${version.junit}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${version.slf4j}</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-core</artifactId>
+      <version>${version.logback}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${version.logback}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
+    <dependency>
+      <groupId>org.jetbrains</groupId>
+      <artifactId>annotations</artifactId>
+      <version>${version.jetbrains_annotations}</version>
+    </dependency>
+  </dependencies>
+
+
+
+  <!-- manual set -->
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <mainClass>${fully.qualified.main.class}</mainClass>
+              <classpathPrefix>lib/</classpathPrefix>
+            </manifest>
+            <manifestEntries>
+              <Implementation-Title>${project.artifactId}</Implementation-Title>
+              <Implementation-Version>${project.version}</Implementation-Version>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.6.0</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>${fully.qualified.main.class}</mainClass>
+            </manifest>
+          </archive>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id> <!-- this is used for inheritance merges -->
+            <phase>package</phase> <!-- bind to the packaging phase -->
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.4.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                <transformer
+                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>${fully.qualified.main.class}</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- GPG -->
+      <!-- Signs the artifacts with a GPG key during the install phase to ensure authenticity and integrity,
+      required for deployment to Maven Central. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>3.2.8</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>install</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Source JAR -->
+      <!-- Generates a source JAR containing the project’s .java files and attaches it to the build
+      during the verify phase. This is also required for publication to Maven Central. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.3.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <!--<goal>jar-no-fork</goal>-->
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Javadoc JAR -->
+      <!-- Generates a Javadoc JAR and attaches it to the build during the verify phase.
+      This is necessary for Maven Central publication. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.6.3</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Compiles the Java source -->
+      <!-- Compiles the Java source code using the specified source and target versions and character encoding. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source>${project.java.version}</source>
+          <target>${project.java.version}</target>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>com.google.auto.service</groupId>
+              <artifactId>auto-service</artifactId>
+              <version>1.1.1</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+
+      <!-- Maven clean -->
+      <!-- Deletes additional custom directories (logs/ and reports/) during the
+      clean phase to keep the workspace tidy. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${basedir}</directory>
+              <includes>
+                <include>logs/</include>
+              </includes>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+            <fileset>
+              <directory>${basedir}</directory>
+              <includes>
+                <include>reports/</include>
+              </includes>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+
+      <!-- Copies dependencies -->
+      <!-- Copies all runtime dependencies into the target/lib directory during the package phase,
+      which is useful for assembling distribution packages. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.8</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>target/lib</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Runs unit tests -->
+      <!-- Runs unit tests during the test phase using JUnit (including JUnit 4.7+ via surefire-junit47).-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M4</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.surefire</groupId>
+            <artifactId>surefire-junit47</artifactId>
+            <version>3.0.0-M4</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <!-- Runs integration tests-->
+      <!-- Runs integration tests during the integration-test and verify phases,
+      typically used for post-build verification.-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>3.0.0-M4</version>
+        <executions>
+          <execution>
+            <id>integration-test</id>
+            <goals>
+              <goal>integration-test</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>verify</id>
+            <goals>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Automates publishing to Maven Central-->
+      <!-- Automates the process of publishing artifacts to Maven Central via Sonatype OSSRH,
+      handling signing, staging, and releasing.-->
+      <plugin>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <version>0.8.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <publishingServerId>central</publishingServerId>
+          <!--<autoPublish>true</autoPublish>-->
+          <!--<waitUntil>published</waitUntil>-->
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+  <!-- manual set end -->
+
+  <!-- project end -->
+</project>
+
