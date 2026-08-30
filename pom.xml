@@ -31,8 +31,8 @@
     <module>sharedresources-project-common</module>
     <module>service-prometheus-export</module>
     <module>workflowroutine-data-enrichment</module>
-      <module>workflowroutine-graph-lifting-data</module>
-      <module>workflowroutine-processing-status</module>
+    <module>workflowroutine-graph-lifting-data</module>
+    <module>workflowroutine-processing-status</module>
     <module>workflowroutine-get-data</module>
   </modules>
 
