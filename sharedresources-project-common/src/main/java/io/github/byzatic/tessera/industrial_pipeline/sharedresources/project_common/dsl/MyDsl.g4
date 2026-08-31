@@ -37,7 +37,7 @@ putCommand
 modifierClause: 'MODIFIER' mod=('local' | 'global');
 aliasClause: 'AS' alias=ID;
 argsClause: '(' argList? ')';
-argList: STRING (',' STRING)*;
+argList: STRING (',' STRING)* ','?;
 
 // Лексические правила
 ID: [a-zA-Z0-9] [a-zA-Z0-9_-]*;

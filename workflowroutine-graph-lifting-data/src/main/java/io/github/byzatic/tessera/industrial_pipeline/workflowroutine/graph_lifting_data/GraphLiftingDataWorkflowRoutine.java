@@ -1,31 +1,20 @@
 package io.github.byzatic.tessera.industrial_pipeline.workflowroutine.graph_lifting_data;
 
 import com.github.zafarkhaja.semver.Version;
-import io.github.byzatic.tessera.industrial_pipeline.workflowroutine.graph_lifting_data.processor.Processor;
-import io.github.byzatic.tessera.industrial_pipeline.workflowroutine.graph_lifting_data.processor.ProcessorInterface;
-import io.github.byzatic.tessera.industrial_pipeline.workflowroutine.graph_lifting_data.processor.dsl.MyDslCustomListener;
-import io.github.byzatic.tessera.industrial_pipeline.workflowroutine.graph_lifting_data.processor.process_engine.ProcessEngine;
-import io.github.byzatic.tessera.industrial_pipeline.workflowroutine.graph_lifting_data.processor.process_engine.ProcessEngineInterface;
-import io.github.byzatic.tessera.industrial_pipeline.sharedresources.project_common.dsl.MyDslBaseListener;
+import io.github.byzatic.tessera.industrial_pipeline.sharedresources.project_common.application.usecase.RunRoutineUseCase;
+import io.github.byzatic.tessera.industrial_pipeline.sharedresources.project_common.composition.TesseraRoutineApplicationFactory;
+import io.github.byzatic.tessera.industrial_pipeline.workflowroutine.graph_lifting_data.application.GraphLiftingFunctionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.github.byzatic.tessera.storageapi.exceptions.MCg3ApiOperationIncompleteException;
 import io.github.byzatic.tessera.workflowroutine.api_engine.MCg3WorkflowRoutineApiInterface;
-import io.github.byzatic.tessera.workflowroutine.configuration.ConfigurationParameter;
 import io.github.byzatic.tessera.workflowroutine.workflowroutines.AbstractWorkflowRoutine;
 import io.github.byzatic.tessera.workflowroutine.workflowroutines.health.HealthFlagProxy;
 import io.github.byzatic.tessera.workflowroutine.workflowroutines.health.HealthFlagState;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-
 public class GraphLiftingDataWorkflowRoutine extends AbstractWorkflowRoutine {
     private final static Logger logger = LoggerFactory.getLogger(GraphLiftingDataWorkflowRoutine.class);
-    private HealthFlagState state = null;
-    private final ProcessorInterface processor;
-    private SupportParamParser paramParser;
+    private final RunRoutineUseCase runRoutine;
     public GraphLiftingDataWorkflowRoutine(MCg3WorkflowRoutineApiInterface workflowRoutineApi, HealthFlagProxy healthFlagProxy) throws MCg3ApiOperationIncompleteException {
         super(
                 GraphLiftingDataWorkflowRoutine.class,
@@ -40,12 +29,14 @@ public class GraphLiftingDataWorkflowRoutine extends AbstractWorkflowRoutine {
         );
         healthFlagProxy.setHealthFlagState(HealthFlagState.RUNNING);
 
-        paramParser = new SupportParamParser(workflowRoutineApi);
-
-        ProcessEngineInterface processEngine = new ProcessEngine(workflowRoutineApi);
-        MyDslBaseListener dslListener = new MyDslCustomListener(processEngine);
-        this.processor = new Processor(dslListener, workflowRoutineApi);
-
+        try {
+            this.runRoutine = TesseraRoutineApplicationFactory.create(
+                    workflowRoutineApi,
+                    new GraphLiftingFunctionHandler()
+            );
+        } catch (Exception e) {
+            throw new MCg3ApiOperationIncompleteException(e);
+        }
     }
 
 
@@ -54,19 +45,7 @@ public class GraphLiftingDataWorkflowRoutine extends AbstractWorkflowRoutine {
         try (AutoCloseable ignored = super.getWorkflowRoutineApi().getExecutionContext().getMdcContext().use()) {
             super.healthFlagProxy.setHealthFlagState(HealthFlagState.RUNNING);
 
-            List<ConfigurationParameter> configurationParameterListDSL = paramParser.getParamsByKey("MCg3-WorkflowRoutine-DSL");
-            List<ConfigurationParameter> configurationParameterListDSLFile = paramParser.getParamsByKey("MCg3-WorkflowRoutine-DSL-File");
-
-
-            for (ConfigurationParameter configurationParameter : configurationParameterListDSL) {
-                String dslString = configurationParameter.getParameterValue();
-                processor.process(dslString);
-            }
-
-            for (ConfigurationParameter configurationParameter : configurationParameterListDSLFile) {
-                String dslString = Files.readString(Paths.get(configurationParameter.getParameterValue()), StandardCharsets.UTF_8);
-                processor.process(dslString);
-            }
+            runRoutine.run();
 
             super.healthFlagProxy.setHealthFlagState(HealthFlagState.COMPLETE);
 
@@ -79,6 +58,6 @@ public class GraphLiftingDataWorkflowRoutine extends AbstractWorkflowRoutine {
 
     @Override
     public void terminate() {
-        state = HealthFlagState.COMPLETE;
+        super.healthFlagProxy.setHealthFlagState(HealthFlagState.COMPLETE);
     }
 }

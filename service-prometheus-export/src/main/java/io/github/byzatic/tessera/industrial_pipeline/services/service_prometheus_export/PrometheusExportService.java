@@ -1,8 +1,16 @@
 package io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export;
 
 import com.github.zafarkhaja.semver.Version;
-import io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export.domain_logic.DomainLogic;
-import io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export.domain_logic.DomainLogicInterface;
+import io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export.application.usecase.SynchronizeMetricsUseCase;
+import io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export.application.service.MetricPublisher;
+import io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export.application.repository.MetricSource;
+import io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export.application.service.MetricsSynchronizationService;
+import io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export.infrastructure.prometheus.PrometheusMetricPublisher;
+import io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export.infrastructure.runtime.ScheduledPrometheusServer;
+import io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export.infrastructure.tessera.PrometheusServiceSettings;
+import io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export.infrastructure.tessera.TesseraGlobalMetricSource;
+import io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export.infrastructure.tessera.TesseraServiceSettingsLoader;
+import io.github.byzatic.tessera.industrial_pipeline.sharedresources.project_common.infrastructure.tessera.TesseraMetricMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.github.byzatic.tessera.storageapi.exceptions.MCg3ApiOperationIncompleteException;
@@ -10,16 +18,11 @@ import io.github.byzatic.tessera.service.api_engine.MCg3ServiceApiInterface;
 import io.github.byzatic.tessera.service.service.AbstractService;
 import io.github.byzatic.tessera.service.service.health.HealthFlagProxy;
 import io.github.byzatic.tessera.service.service.health.HealthFlagState;
-import io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export.prometheus_exporter.MetricsUpdateManager;
-import io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export.prometheus_exporter.MetricsUpdateManagerInterface;
-import io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export.prometheus_exporter.PrometheusExporter;
-import io.github.byzatic.tessera.industrial_pipeline.services.service_prometheus_export.prometheus_exporter.PrometheusExporterInterface;
-
-import java.net.URL;
+import java.time.Clock;
 
 public class PrometheusExportService extends AbstractService {
     private final static Logger logger = LoggerFactory.getLogger(PrometheusExportService.class);
-    private final DomainLogicInterface domainLogic;
+    private final ScheduledPrometheusServer runtime;
 
     public PrometheusExportService(MCg3ServiceApiInterface serviceApi, HealthFlagProxy healthFlagProxy) throws MCg3ApiOperationIncompleteException {
         super(
@@ -35,39 +38,31 @@ public class PrometheusExportService extends AbstractService {
         );
         healthFlagProxy.setHealthFlagState(HealthFlagState.RUNNING);
         try {
-            SupportParamParser paramParser = new SupportParamParser(serviceApi);
-
-            String storageName = paramParser.getParamByKey("storage").getParameterValue();
-            Long expiredMinutesAgo = Long.valueOf(paramParser.getParamByKey("expiredMinutesAgo").getParameterValue());
-            MetricsUpdateManagerInterface metricsUpdateManager = new MetricsUpdateManager(
+            PrometheusServiceSettings settings = new TesseraServiceSettingsLoader().load(serviceApi);
+            MetricSource metricSource = new TesseraGlobalMetricSource(
                     serviceApi.getStorageApi(),
-                    storageName,
-                    expiredMinutesAgo
-
+                    settings.storageName(),
+                    new TesseraMetricMapper()
             );
-
-            URL url = new URL(paramParser.getParamByKey("apiURL").getParameterValue());
-
-            String httpServerAddress = url.getHost();
-            Integer httpServerPort = url.getPort();
-            String cronMetricUpdateString = paramParser.getParamByKey("cronMetricUpdateString").getParameterValue();
-            PrometheusExporterInterface prometheusExporter = new PrometheusExporter(
-                    metricsUpdateManager,
-                    httpServerAddress,
-                    httpServerPort,
-                    cronMetricUpdateString,
+            MetricPublisher metricPublisher = new PrometheusMetricPublisher();
+            SynchronizeMetricsUseCase synchronizeMetrics = new MetricsSynchronizationService(
+                    metricSource,
+                    metricPublisher,
+                    settings.retention(),
+                    Clock.systemUTC()
+            );
+            this.runtime = new ScheduledPrometheusServer(
+                    synchronizeMetrics,
+                    settings.serverAddress(),
+                    settings.serverPort(),
+                    settings.updateCron(),
                     serviceApi
             );
-
-            this.domainLogic = new DomainLogic(prometheusExporter);
         } catch (Exception e) {
             throw new MCg3ApiOperationIncompleteException(e);
         }
 
     }
-
-    // TODO: default public PrometheusExportService() with develop realisation service API (MCg3ServiceApiInterface) and Health Flag Proxy (healthFlagProxy)
-
 
     @Override
     public void run() {
@@ -75,7 +70,7 @@ public class PrometheusExportService extends AbstractService {
             super.healthFlagProxy.setHealthFlagState(HealthFlagState.RUNNING);
             logger.debug("healthFlagProxy RUNNING -> {}", super.healthFlagProxy);
 
-            this.domainLogic.process();
+            runtime.run();
 
             super.healthFlagProxy.setHealthFlagState(HealthFlagState.STOPPED);
             logger.debug("healthFlagProxy STOPPED -> {}", super.healthFlagProxy);
@@ -90,12 +85,7 @@ public class PrometheusExportService extends AbstractService {
 
     @Override
     public void terminate() {
-        try {
-            this.domainLogic.terminate();
-        } catch (MCg3ApiOperationIncompleteException e) {
-            super.healthFlagProxy.setHealthFlagState(HealthFlagState.FATAL);
-            throw new RuntimeException(e);
-        }
+        runtime.terminate();
     }
 
 }

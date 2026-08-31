@@ -34,6 +34,7 @@
     <module>workflowroutine-graph-lifting-data</module>
     <module>workflowroutine-processing-status</module>
     <module>workflowroutine-get-data</module>
+    <module>architecture-tests</module>
   </modules>
 
   <scm>
@@ -455,4 +456,3 @@
 
   <!-- project end -->
 </project>
-
