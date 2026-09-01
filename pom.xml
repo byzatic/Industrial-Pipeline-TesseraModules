@@ -4,7 +4,7 @@
 
   <groupId>io.github.byzatic</groupId>
   <artifactId>Industrial-Pipeline-TesseraModules</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
 
   <name>Industrial-Pipeline-TesseraModules</name>
@@ -31,8 +31,8 @@
     <module>sharedresources-project-common</module>
     <module>service-prometheus-export</module>
     <module>workflowroutine-data-enrichment</module>
-      <module>workflowroutine-graph-lifting-data</module>
-      <module>workflowroutine-processing-status</module>
+    <module>workflowroutine-graph-lifting-data</module>
+    <module>workflowroutine-processing-status</module>
     <module>workflowroutine-get-data</module>
   </modules>
 
@@ -74,12 +74,12 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- dependency versions list -->
-    <version.java_byzatic_commons>0.0.6</version.java_byzatic_commons>
+    <version.java_byzatic_commons>0.0.7</version.java_byzatic_commons>
+    <version.tessera_workflow_toolkit>0.0.2</version.tessera_workflow_toolkit>
     <version.slf4j>1.7.25</version.slf4j>
     <version.logback>1.5.13</version.logback>
     <version.junit>4.13.1</version.junit>
     <version.jetbrains_annotations>21.0.1</version.jetbrains_annotations>
-    <version.tessera_workflow_toolkit>0.0.1</version.tessera_workflow_toolkit>
   </properties>
 
   <!-- manual set -->
@@ -455,4 +455,3 @@
 
   <!-- project end -->
 </project>
-

@@ -4,11 +4,11 @@
     <parent>
         <groupId>io.github.byzatic</groupId>
         <artifactId>Industrial-Pipeline-TesseraModules</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>workflowroutine-graph-lifting-data</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>workflowroutine-graph-lifting-data</name>
@@ -20,15 +20,8 @@
         <dependency>
             <groupId>io.github.byzatic</groupId>
             <artifactId>sharedresources-project-common</artifactId>
-            <version>0.0.1</version>
+            <version>1.0.0</version>
             <scope>provided</scope>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>2.3.34</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
