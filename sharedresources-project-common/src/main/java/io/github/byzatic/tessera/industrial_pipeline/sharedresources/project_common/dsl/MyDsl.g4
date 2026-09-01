@@ -11,9 +11,9 @@ command
 getCommand
   : 'GET FROM' source=sourceType
     'STORAGE' storage=ID
-    modifierClause?
+    modifier=modifierClause?
     'BY DATA ID' dataId=ID
-    aliasClause? ';'
+    alias=aliasClause? ';'
   ;
 
 sourceType
@@ -23,14 +23,14 @@ sourceType
 
 processCommand
   : 'PROCESS FUNCTION' function=ID
-    argsClause?
+    arguments=argsClause?
     'RETURN' resultId=ID ';'
   ;
 
 putCommand
   : 'PUT DATA' localDataId=ID
     'TO STORAGE' storage=ID
-    modifierClause?
+    modifier=modifierClause?
     'BY DATA ID' dataId=ID ';'
   ;
 

@@ -233,7 +233,9 @@ public class MyDslParser extends Parser {
 	public static class GetCommandContext extends ParserRuleContext {
 		public SourceTypeContext source;
 		public Token storage;
+		public ModifierClauseContext modifier;
 		public Token dataId;
+		public AliasClauseContext alias;
 		public SourceTypeContext sourceType() {
 			return getRuleContext(SourceTypeContext.class,0);
 		}
@@ -288,7 +290,7 @@ public class MyDslParser extends Parser {
 			if (_la==T__10) {
 				{
 				setState(36);
-				modifierClause();
+				((GetCommandContext)_localctx).modifier = modifierClause();
 				}
 			}
 
@@ -302,7 +304,7 @@ public class MyDslParser extends Parser {
 			if (_la==T__13) {
 				{
 				setState(41);
-				aliasClause();
+				((GetCommandContext)_localctx).alias = aliasClause();
 				}
 			}
 
@@ -380,6 +382,7 @@ public class MyDslParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class ProcessCommandContext extends ParserRuleContext {
 		public Token function;
+		public ArgsClauseContext arguments;
 		public Token resultId;
 		public List<TerminalNode> ID() { return getTokens(MyDslParser.ID); }
 		public TerminalNode ID(int i) {
@@ -425,7 +428,7 @@ public class MyDslParser extends Parser {
 			if (_la==T__14) {
 				{
 				setState(53);
-				argsClause();
+				((ProcessCommandContext)_localctx).arguments = argsClause();
 				}
 			}
 
@@ -452,6 +455,7 @@ public class MyDslParser extends Parser {
 	public static class PutCommandContext extends ParserRuleContext {
 		public Token localDataId;
 		public Token storage;
+		public ModifierClauseContext modifier;
 		public Token dataId;
 		public List<TerminalNode> ID() { return getTokens(MyDslParser.ID); }
 		public TerminalNode ID(int i) {
@@ -501,7 +505,7 @@ public class MyDslParser extends Parser {
 			if (_la==T__10) {
 				{
 				setState(64);
-				modifierClause();
+				((PutCommandContext)_localctx).modifier = modifierClause();
 				}
 			}
 

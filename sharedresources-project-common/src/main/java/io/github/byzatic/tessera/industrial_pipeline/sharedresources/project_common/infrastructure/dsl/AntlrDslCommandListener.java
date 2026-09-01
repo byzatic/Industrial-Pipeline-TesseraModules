@@ -19,16 +19,16 @@ public final class AntlrDslCommandListener extends MyDslBaseListener {
 
     @Override
     public void enterGetCommand(MyDslParser.GetCommandContext context) {
-        String childName = context.sourceType().child == null
+        String childName = context.source.child == null
                 ? null
-                : context.sourceType().child.getText();
-        String modifier = context.modifierClause() == null
+                : context.source.child.getText();
+        String modifier = context.modifier == null
                 ? "local"
-                : context.modifierClause().mod.getText();
+                : context.modifier.mod.getText();
         String dataId = context.dataId.getText();
-        String alias = context.aliasClause() == null
+        String alias = context.alias == null
                 ? dataId
-                : context.aliasClause().alias.getText();
+                : context.alias.alias.getText();
         invoke(() -> commandHandler.getData(
                 childName,
                 context.storage.getText(),
@@ -41,8 +41,8 @@ public final class AntlrDslCommandListener extends MyDslBaseListener {
     @Override
     public void enterProcessCommand(MyDslParser.ProcessCommandContext context) {
         List<String> arguments = new ArrayList<>();
-        if (context.argsClause() != null && context.argsClause().argList() != null) {
-            for (TerminalNode argument : context.argsClause().argList().STRING()) {
+        if (context.arguments != null && context.arguments.argList() != null) {
+            for (TerminalNode argument : context.arguments.argList().STRING()) {
                 arguments.add(unquote(argument.getText()));
             }
         }
@@ -55,9 +55,9 @@ public final class AntlrDslCommandListener extends MyDslBaseListener {
 
     @Override
     public void enterPutCommand(MyDslParser.PutCommandContext context) {
-        String modifier = context.modifierClause() == null
+        String modifier = context.modifier == null
                 ? "local"
-                : context.modifierClause().mod.getText();
+                : context.modifier.mod.getText();
         invoke(() -> commandHandler.putData(
                 context.localDataId.getText(),
                 context.storage.getText(),
